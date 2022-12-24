@@ -78,10 +78,27 @@ res.send(options)
 
 
 app.post("/booking",async (req, res)=>{
-    const booking =req.body
+    const booking =req.body;
+    console.log(booking)
+    const query={
+        trementDate:booking.trementDate,
+        email:booking.email,
+         trementName:booking.trementName
+    }
+
+
+   const allredybook=await bookingCollection.find(query).toArray();
+
+   if(allredybook.length){
+const message=`you have alredy book ${booking.trementDate}`
+return res.send({acknowledged:false,message});
+   }
+
+
+
     const result=await bookingCollection.insertOne(booking)
     res.send(result);
-    console.log(result);
+    
 })
 
 
